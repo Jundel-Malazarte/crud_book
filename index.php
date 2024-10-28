@@ -1,7 +1,7 @@
 <?php
 include "db_conn.php";
 
-$search = '';
+$search = ''; // Search connection
 if (isset($_POST['search'])) {
     $search = mysqli_real_escape_string($conn, $_POST['search']);
 }
@@ -20,21 +20,15 @@ $result = mysqli_query($conn, $sql);
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css">
-
-  <!-- Fontawesome -->
-  <link rel=stylesheet href="fontawesome/css/all.min.css">
-  
-  <!--
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  -->
+  <link rel="stylesheet" href="./css/style.css">
 
   <title>Skills Test CRUD Application</title>
 
   <style>
-    /* Custom styles for alert */
+    /* Styles for alert */
     .alert {
       position: relative;
       padding: 1rem;
@@ -99,28 +93,32 @@ $result = mysqli_query($conn, $sql);
       </thead>
       <tbody>
         <?php
-        while ($row = mysqli_fetch_assoc($result)) {
+        if (mysqli_num_rows($result) > 0) {
+          while ($row = mysqli_fetch_assoc($result)) {
         ?>
-          <tr>
-            <td><?php echo $row["ISBN"] ?></td>
-            <td><?php echo $row["Title"] ?></td>
-            <td><?php echo $row["Copyright"] ?></td>
-            <td><?php echo $row["Edition"] ?></td>
-            <td><?php echo $row["Price"] ?></td>
-            <td><?php echo $row["Quantity"] ?></td>
-            <td><?php echo $row["Total"] ?></td>
-            <td>
-              <a href="update.php?id=<?php echo $row["ISBN"] ?>" class="action-link"><i class="fa-solid fa-pen-to-square"></i>Edit</a>
-              <a href="delete.php?id=<?php echo $row["ISBN"] ?>" class="action-link"><i class="fa-solid fa-trash"></i>DEL</a>
-            </td>
-          </tr>
+            <tr>
+              <td><?php echo $row["ISBN"] ?></td>
+              <td><?php echo $row["Title"] ?></td>
+              <td><?php echo $row["Copyright"] ?></td>
+              <td><?php echo $row["Edition"] ?></td>
+              <td><?php echo $row["Price"] ?></td>
+              <td><?php echo $row["Quantity"] ?></td>
+              <td><?php echo $row["Total"] ?></td>
+              <td>
+                  <a href="update.php?id=<?php echo $row["ISBN"] ?>" class="edit-link">Edit</a>
+                  <a href="delete.php?id=<?php echo $row["ISBN"] ?>" class="delete-link">Delete</a>
+              </td>
+            </tr>
         <?php
+          }
+        } else {
+          echo "<tr><td colspan='8' class='text-center'>Book not found.</td></tr>";
         }
         ?>
       </tbody>
     </table>
   </div>
-
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Add event listener to all close buttons
